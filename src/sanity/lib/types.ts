@@ -9,7 +9,9 @@ export type SiteSettings = {
 export type ServiceItem = {
   _id?: string;
   name: string;
+  tagline?: string | null;
   description: string;
+  deliverables?: string[] | null;
   imageUrl?: string | null;
   order?: number;
 };

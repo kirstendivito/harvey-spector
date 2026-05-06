@@ -14,7 +14,9 @@ export const servicesQuery = defineQuery(`
   *[_type == "service"] | order(order asc) {
     _id,
     name,
+    tagline,
     description,
+    deliverables,
     "imageUrl": image.asset->url,
     order
   }
