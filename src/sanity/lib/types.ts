@@ -30,6 +30,8 @@ export type ProjectItem = {
 export type TestimonialItem = {
   _id?: string;
   clientName?: string;
+  clientRole?: string | null;
+  company?: string | null;
   quote: string;
   logoUrl?: string | null;
   logoHeight: number;

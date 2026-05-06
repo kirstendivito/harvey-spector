@@ -39,6 +39,8 @@ export const testimonialsQuery = defineQuery(`
   *[_type == "testimonial"] | order(order asc) {
     _id,
     clientName,
+    clientRole,
+    company,
     quote,
     "logoUrl": logo.asset->url,
     logoHeight,
