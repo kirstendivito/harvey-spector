@@ -51,7 +51,10 @@ export const testimonialsQuery = defineQuery(`
 export const newsPostsQuery = defineQuery(`
   *[_type == "newsPost"] | order(order asc) {
     _id,
+    title,
     excerpt,
+    url,
+    publishedAt,
     "imageUrl": image.asset->url,
     order
   }

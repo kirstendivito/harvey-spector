@@ -40,7 +40,10 @@ export type TestimonialItem = {
 
 export type NewsPostItem = {
   _id?: string;
+  title?: string | null;
   excerpt?: string | null;
+  url?: string | null;
+  publishedAt?: string | null;
   imageUrl?: string | null;
   order?: number;
 };
