@@ -20,6 +20,9 @@ export type ProjectItem = {
   _id?: string;
   name: string;
   tags: string[];
+  description?: string | null;
+  url?: string | null;
+  year?: number | null;
   imageUrl?: string | null;
   order?: number;
 };

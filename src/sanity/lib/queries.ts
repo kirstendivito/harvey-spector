@@ -27,6 +27,9 @@ export const projectsQuery = defineQuery(`
     _id,
     name,
     tags,
+    description,
+    url,
+    year,
     "imageUrl": image.asset->url,
     order
   }
