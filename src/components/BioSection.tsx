@@ -1,7 +1,9 @@
-const bioImage = "/bio.png";
+const defaultBioImage = "/bio.png";
 
-const bioText =
+const defaultBioText =
   "Placeholder paragraph one. This is where you introduce yourself — your background, your passion for your craft, and what drives you creatively. Two to three sentences work best here. Placeholder paragraph two. Here you can describe your technical approach, how you collaborate with clients, or what sets your work apart from others in your field.";
+
+import type { SiteSettings } from "@/sanity/lib/types";
 
 function CornerBrackets({ children }: { children: React.ReactNode }) {
   return (
@@ -31,7 +33,9 @@ function CornerBrackets({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function BioSection() {
+export default function BioSection({ settings }: { settings?: SiteSettings }) {
+  const bioText = settings?.bioText ?? defaultBioText;
+  const bioImage = settings?.bioImageUrl ?? defaultBioImage;
   return (
     <section className="bg-white overflow-x-hidden px-4 md:px-8 py-12 md:py-20">
 

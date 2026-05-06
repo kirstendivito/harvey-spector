@@ -1,25 +1,11 @@
-const imgNews1 = "https://www.figma.com/api/mcp/asset/c48065db-3ad5-4dcd-99c2-4f7330e1a292";
-const imgNews2 = "https://www.figma.com/api/mcp/asset/a42942a2-f82b-4b49-bef3-1089b6d01ca9";
-const imgNews3 = "https://www.figma.com/api/mcp/asset/04059587-3c8f-40c7-83ad-c3fa68e78d72";
+import type { NewsPostItem } from "@/sanity/lib/types";
 
-type NewsItem = {
-  image: string;
-  text: string;
-};
+type NewsItem = NewsPostItem & { image?: string; text?: string };
 
-const newsItems: NewsItem[] = [
-  {
-    image: imgNews1,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    image: imgNews2,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    image: imgNews3,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
+const defaultNewsItems: NewsItem[] = [
+  { text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
+  { text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
+  { text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
 ];
 
 function ReadMoreLink() {
@@ -44,7 +30,16 @@ function ReadMoreLink() {
   );
 }
 
-export default function NewsSection() {
+function NewsCard({ item }: { item: NewsItem }) {
+  const imageSrc = item.imageUrl ?? item.image;
+  const text = item.excerpt ?? item.text ?? "";
+  return { imageSrc, text };
+}
+
+export default function NewsSection({ newsPosts }: { newsPosts?: NewsPostItem[] | null }) {
+
+  const newsItems: NewsItem[] = newsPosts && newsPosts.length > 0 ? newsPosts : defaultNewsItems;
+
   return (
     <section className="bg-[#f3f3f3] overflow-hidden">
 
@@ -54,21 +49,26 @@ export default function NewsSection() {
           Keep up with my latest news &amp; achievements
         </p>
         <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory -mx-4 px-4">
-          {newsItems.map((item, i) => (
-            <div key={i} className="flex flex-col gap-4 shrink-0 w-[300px] snap-start">
-              <div className="relative h-[398px] overflow-hidden">
-                <img
-                  src={item.image}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-                />
+          {newsItems.map((item, i) => {
+            const { imageSrc, text } = NewsCard({ item });
+            return (
+              <div key={item._id ?? i} className="flex flex-col gap-4 shrink-0 w-[300px] snap-start">
+                {imageSrc && (
+                  <div className="relative h-[398px] overflow-hidden">
+                    <img
+                      src={imageSrc}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                    />
+                  </div>
+                )}
+                <p className="font-[family-name:var(--font-inter)] font-normal text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.04em]">
+                  {text}
+                </p>
+                <ReadMoreLink />
               </div>
-              <p className="font-[family-name:var(--font-inter)] font-normal text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.04em]">
-                {item.text}
-              </p>
-              <ReadMoreLink />
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -87,47 +87,31 @@ export default function NewsSection() {
 
         {/* 3 cards with thin vertical dividers */}
         <div className="flex-1 min-w-0 flex items-start divide-x divide-[#ddd]">
-          <div className="flex flex-col gap-4 flex-1 min-w-0 pr-8">
-            <div className="relative h-[469px] overflow-hidden">
-              <img
-                src={newsItems[0].image}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-              />
-            </div>
-            <p className="font-[family-name:var(--font-inter)] font-normal text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.04em]">
-              {newsItems[0].text}
-            </p>
-            <ReadMoreLink />
-          </div>
-
-          <div className="flex flex-col gap-4 flex-1 min-w-0 px-8 pt-[120px]">
-            <div className="relative h-[469px] overflow-hidden">
-              <img
-                src={newsItems[1].image}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-              />
-            </div>
-            <p className="font-[family-name:var(--font-inter)] font-normal text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.04em]">
-              {newsItems[1].text}
-            </p>
-            <ReadMoreLink />
-          </div>
-
-          <div className="flex flex-col gap-4 flex-1 min-w-0 pl-8">
-            <div className="relative h-[469px] overflow-hidden">
-              <img
-                src={newsItems[2].image}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-              />
-            </div>
-            <p className="font-[family-name:var(--font-inter)] font-normal text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.04em]">
-              {newsItems[2].text}
-            </p>
-            <ReadMoreLink />
-          </div>
+          {[0, 1, 2].map((idx) => {
+            const item = newsItems[idx];
+            if (!item) return null;
+            const { imageSrc, text } = NewsCard({ item });
+            return (
+              <div
+                key={item._id ?? idx}
+                className={`flex flex-col gap-4 flex-1 min-w-0 ${idx === 0 ? "pr-8" : idx === 1 ? "px-8 pt-[120px]" : "pl-8"}`}
+              >
+                {imageSrc && (
+                  <div className="relative h-[469px] overflow-hidden">
+                    <img
+                      src={imageSrc}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                    />
+                  </div>
+                )}
+                <p className="font-[family-name:var(--font-inter)] font-normal text-[14px] text-[#1f1f1f] leading-[1.3] tracking-[-0.04em]">
+                  {text}
+                </p>
+                <ReadMoreLink />
+              </div>
+            );
+          })}
         </div>
 
       </div>

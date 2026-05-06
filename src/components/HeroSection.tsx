@@ -7,7 +7,13 @@ const heroImageMobile = "/hero-mobile.png";
 
 const navLinks = ["About", "Services", "Projects", "News", "Contact"];
 
-export default function HeroSection() {
+import type { SiteSettings } from "@/sanity/lib/types";
+
+export default function HeroSection({ settings }: { settings?: SiteSettings }) {
+  const heroLabel = settings?.heroLabel ?? "Hello i'm";
+  const heroDescription =
+    settings?.heroDescription ??
+    "H.Studio is a full-service creative studio creating beautiful digital experiences and products. We are an award winning design and art group specializing in branding, web design and engineering.";
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -101,7 +107,7 @@ export default function HeroSection() {
       <div className="relative flex-1 flex flex-col justify-end pb-6 md:flex-none md:mt-[240px] md:pb-0">
         {/* Label */}
         <p className="px-4 md:px-8 font-mono text-[14px] text-white uppercase mix-blend-overlay leading-[1.1] text-center md:text-left md:pl-[50px]">
-          [ Hello i&apos;m ]
+          [ {heroLabel} ]
         </p>
 
         {/* Name — full-width on mobile (no side padding) so DM Sans fits at 82px;
@@ -120,13 +126,7 @@ export default function HeroSection() {
         <div className="px-4 md:px-8 mt-4 md:mt-0 pl-[41px] md:pl-8 md:flex md:justify-end">
           <div className="flex flex-col gap-4 w-[293px] md:w-[294px]">
             <p className="font-[family-name:var(--font-dm-sans)] font-bold italic text-[14px] text-[#1f1f1f] uppercase tracking-[-0.04em] leading-[1.1]">
-              H.Studio is a{" "}
-              <span className="font-normal">full-service</span>{" "}
-              creative studio creating beautiful digital experiences and
-              products. We are an{" "}
-              <span className="font-normal">award winning</span>{" "}
-              desing and art group specializing in branding, web design and
-              engineering.
+              {heroDescription}
             </p>
             <button className="w-fit px-4 py-3 bg-black text-white text-[14px] font-medium tracking-[-0.04em] rounded-full hover:opacity-80 transition-opacity">
               Let&apos;s talk

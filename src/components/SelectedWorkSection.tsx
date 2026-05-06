@@ -1,19 +1,12 @@
-const imgSurfersParadise = "/work-surfers-paradise.png";
-const imgCyberpunkCaffe = "/work-cyberpunk-caffe.png";
-const imgAgency976 = "/work-agency-976.png";
-const imgMinimalPlayground = "/work-minimal-playground.png";
+import type { ProjectItem } from "@/sanity/lib/types";
 
-type Project = {
-  name: string;
-  tags: string[];
-  image: string;
-};
+type LocalProject = ProjectItem & { image?: string };
 
-const projects: Project[] = [
-  { name: "Surfers Paradise", tags: ["Social Media", "Photography"], image: imgSurfersParadise },
-  { name: "Cyberpunk Caffe", tags: ["Social Media", "Photography"], image: imgCyberpunkCaffe },
-  { name: "Agency 976", tags: ["Social Media", "Photography"], image: imgAgency976 },
-  { name: "Minimal Playground", tags: ["Social Media", "Photography"], image: imgMinimalPlayground },
+const defaultProjects: LocalProject[] = [
+  { name: "Surfers Paradise", tags: ["Social Media", "Photography"], image: "/work-surfers-paradise.png" },
+  { name: "Cyberpunk Caffe", tags: ["Social Media", "Photography"], image: "/work-cyberpunk-caffe.png" },
+  { name: "Agency 976", tags: ["Social Media", "Photography"], image: "/work-agency-976.png" },
+  { name: "Minimal Playground", tags: ["Social Media", "Photography"], image: "/work-minimal-playground.png" },
 ];
 
 function ArrowIcon() {
@@ -25,12 +18,13 @@ function ArrowIcon() {
   );
 }
 
-function ProjectCard({ project, containerClass }: { project: Project; containerClass: string }) {
+function ProjectCard({ project, containerClass }: { project: LocalProject; containerClass: string }) {
+  const imageSrc = project.imageUrl ?? project.image ?? "";
   return (
     <div className="flex flex-col gap-[10px]">
       <div className={`relative overflow-hidden ${containerClass}`}>
         <img
-          src={project.image}
+          src={imageSrc}
           alt=""
           className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
         />
@@ -89,7 +83,8 @@ function CtaBox() {
   );
 }
 
-export default function SelectedWorkSection() {
+export default function SelectedWorkSection({ projects: sanityProjects }: { projects?: ProjectItem[] | null }) {
+  const projects: LocalProject[] = sanityProjects && sanityProjects.length > 0 ? sanityProjects : defaultProjects;
   return (
     <section className="bg-white overflow-x-hidden px-4 md:px-8 py-12 md:py-[80px]">
       <div className="flex flex-col gap-8 md:gap-[61px]">

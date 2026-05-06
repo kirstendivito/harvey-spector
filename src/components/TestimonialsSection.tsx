@@ -1,11 +1,8 @@
-type Testimonial = {
-  logo: string;
-  logoHeight: number;
-  quote: string;
-  name: string;
-};
+import type { TestimonialItem } from "@/sanity/lib/types";
 
-const testimonials: Testimonial[] = [
+type LocalTestimonial = TestimonialItem & { logo?: string; name?: string };
+
+const defaultTestimonials: LocalTestimonial[] = [
   {
     logo: "/testimonial-logo-1.png",
     logoHeight: 19,
@@ -32,14 +29,16 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-function TestimonialCard({ t, rotation }: { t: Testimonial; rotation: string }) {
+function TestimonialCard({ t, rotation }: { t: LocalTestimonial; rotation: string }) {
+  const logoSrc = t.logoUrl ?? t.logo ?? "";
+  const displayName = t.clientName ?? t.name ?? "";
   return (
     <div
       style={{ transform: `rotate(${rotation})` }}
       className="bg-[#f1f1f1] border border-[#ddd] flex flex-col gap-4 p-6 rounded-[4px] w-[280px] md:w-[353px] shrink-0"
     >
       <img
-        src={t.logo}
+        src={logoSrc}
         alt=""
         className="w-auto block self-start"
         style={{ height: t.logoHeight }}
@@ -48,13 +47,14 @@ function TestimonialCard({ t, rotation }: { t: Testimonial; rotation: string }) 
         {t.quote}
       </p>
       <p className="font-[family-name:var(--font-inter)] font-black text-[14px] md:text-[16px] text-black uppercase leading-[1.1] tracking-[-0.04em]">
-        {t.name}
+        {displayName}
       </p>
     </div>
   );
 }
 
-export default function TestimonialsSection() {
+export default function TestimonialsSection({ testimonials: sanityTestimonials }: { testimonials?: TestimonialItem[] | null }) {
+  const testimonials: LocalTestimonial[] = sanityTestimonials && sanityTestimonials.length > 0 ? sanityTestimonials : defaultTestimonials;
   return (
     <section className="bg-white overflow-hidden">
 

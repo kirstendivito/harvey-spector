@@ -1,4 +1,8 @@
-const services = [
+import type { ServiceItem } from "@/sanity/lib/types";
+
+type LocalServiceItem = ServiceItem & { number?: string; image?: string };
+
+const defaultServices: LocalServiceItem[] = [
   {
     number: "[ 1 ]",
     name: "Brand Discovery",
@@ -29,7 +33,8 @@ const services = [
   },
 ];
 
-export default function ServicesSection() {
+export default function ServicesSection({ services: sanityServices }: { services?: ServiceItem[] | null }) {
+  const services: LocalServiceItem[] = sanityServices && sanityServices.length > 0 ? sanityServices : defaultServices;
   return (
     <section className="bg-[#1f1f1f] overflow-x-hidden px-4 md:px-8 py-12 md:py-20">
       <div className="flex flex-col gap-12 md:gap-16">
@@ -42,7 +47,7 @@ export default function ServicesSection() {
               [ Services ]
             </p>
             <span className="font-[family-name:var(--font-inter)] font-light text-[32px] md:text-[96px] text-white leading-[0.84] tracking-[-0.08em] uppercase">
-              [4]
+              [{services.length}]
             </span>
           </div>
 
@@ -54,12 +59,15 @@ export default function ServicesSection() {
 
         {/* Service items */}
         <div className="flex flex-col gap-12 md:gap-[48px]">
-          {services.map((service) => (
-            <div key={service.number} className="flex flex-col gap-4">
+          {services.map((service, i) => {
+            const numberLabel = service.number ?? `[ ${(service.order ?? i + 1)} ]`;
+            const imageSrc = service.imageUrl ?? service.image ?? "";
+            return (
+            <div key={service._id ?? service.number ?? i} className="flex flex-col gap-4">
               {/* Number + divider */}
               <div className="flex items-center gap-4">
                 <span className="font-mono text-[14px] text-white uppercase leading-[1.1] shrink-0">
-                  {service.number}
+                  {numberLabel}
                 </span>
                 <div className="flex-1 h-px bg-white opacity-20" />
               </div>
@@ -78,7 +86,7 @@ export default function ServicesSection() {
                   </p>
                   <div className="w-[151px] h-[151px] overflow-hidden shrink-0">
                     <img
-                      src={service.image}
+                      src={imageSrc}
                       alt=""
                       className="w-full h-full object-cover pointer-events-none select-none"
                     />
@@ -86,7 +94,8 @@ export default function ServicesSection() {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
 
       </div>

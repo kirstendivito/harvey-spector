@@ -1,4 +1,7 @@
-export default function AboutSection() {
+import type { SiteSettings } from "@/sanity/lib/types";
+
+export default function AboutSection({ settings }: { settings?: SiteSettings }) {
+  const yearsLabel = settings?.aboutYearsLabel ?? "8+ years in industry";
   return (
     <section className="bg-white overflow-x-hidden px-4 md:px-8 py-12 md:py-[120px]">
       <div className="flex flex-col gap-6">
@@ -6,7 +9,7 @@ export default function AboutSection() {
         {/* Label + divider */}
         <div className="flex flex-col gap-3">
           <p className="font-mono text-[14px] text-[#1f1f1f] uppercase leading-[1.1] text-right">
-            [ 8+ years in industry ]
+            [ {yearsLabel} ]
           </p>
           <div className="w-full h-px bg-[#1f1f1f]" />
         </div>
